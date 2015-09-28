@@ -19,12 +19,28 @@ public class Hand {
 
 	@XmlElement
 	private int HandStrength;
+	public int getHiHand() {
+		return HiHand;
+	}
+	public void setHiHand(int hiHand) {
+		HiHand = hiHand;
+	}
+	public void setHandStrength(int handStrength) {
+		HandStrength = handStrength;
+	}
+	public void setLoHand(int loHand) {
+		LoHand = loHand;
+	}
+	public void setKicker(ArrayList<Integer> kicker) {
+		Kicker = kicker;
+	}
+
 	@XmlElement
 	private int HiHand;
 	@XmlElement
 	private int LoHand;
 	@XmlElement
-	private int Kicker;
+	private ArrayList<Integer> Kicker;
 
 	private boolean bScored = false;
 
@@ -91,7 +107,7 @@ public class Hand {
 	}
 
 
-	public int getKicker() {
+	public ArrayList<Integer> getKicker() {
 		return Kicker;
 	}
 
@@ -117,6 +133,9 @@ public class Hand {
 	}
 
 	public void EvalHand() {
+		//Create array list for kickers
+		ArrayList<Integer> myKicker = new ArrayList<Integer>();
+		
 		// Evaluates if the hand is a flush and/or straight then figures out
 		// the hand's strength attributes
 
@@ -192,14 +211,14 @@ public class Hand {
 				&& Flush == true
 				&& CardsInHand.get(eCardNo.FifthCard.getCardNo()).getRank() == eRank.TEN
 				&& Ace) {
-			ScoreHand(eHandStrength.RoyalFlush, 0, 0, 0);
+			ScoreHand(eHandStrength.RoyalFlush, 0, 0, myKicker );
 		}
 
 		// EVALUATE STRAIGHT FLUSH WITH ACE
 		else if (Straight == true && Flush == true && Ace) {
 			ScoreHand(eHandStrength.StraightFlush,
 					CardsInHand.get(eCardNo.SecondCard.getCardNo()).getRank()
-							.getRank(), 0, 0);
+							.getRank(), 0, myKicker);
 		}
 		
 		//EVALUATE SPRING FLUSH WITHOUT ACE
@@ -207,7 +226,7 @@ public class Hand {
 		else if (Straight == true && Flush == true) {
 			ScoreHand(eHandStrength.StraightFlush,
 					CardsInHand.get(eCardNo.FirstCard.getCardNo()).getRank()
-							.getRank(), 0, 0);
+							.getRank(), 0, myKicker);
 		}
 		// EVALUATE FIVE OF A KIND
 				// (Given in Spring Borgata)
@@ -216,7 +235,7 @@ public class Hand {
 						.get(eCardNo.FifthCard.getCardNo()).getRank()) {
 					ScoreHand(eHandStrength.FiveOfAKind,
 							CardsInHand.get(eCardNo.FirstCard.getCardNo()).getRank()
-									.getRank(), 0, 0);
+									.getRank(), 0, myKicker);
 				}
 
 		// EVALUATE FOUR OF A KIND
@@ -225,21 +244,26 @@ public class Hand {
 		else if (CardsInHand.get(eCardNo.FirstCard.getCardNo()).getRank()
 					.getRank() == CardsInHand.get(eCardNo.FourthCard.getCardNo())
 					.getRank().getRank() ){
+				
+			//set myKicker
+				myKicker.add(CardsInHand.get(eCardNo.FifthCard.getCardNo()).getRank().getRank());
+				
 				//Score hand
 				ScoreHand(eHandStrength.FourOfAKind, 
 					CardsInHand.get(eCardNo.FirstCard.getCardNo()).getRank().getRank(),
-					0, CardsInHand.get(eCardNo.FifthCard.getCardNo()).getRank().getRank());
+					0, myKicker);
 		}
 		
 		//Second Case
 		else if ((CardsInHand.get(eCardNo.SecondCard.getCardNo()).getRank()
 						.getRank() == CardsInHand.get(eCardNo.FifthCard.getCardNo())
 						.getRank().getRank())){
-			
+				//set myKicker
+			myKicker.add(CardsInHand.get(eCardNo.FirstCard.getCardNo()).getRank().getRank());
 				//Score Hand
 				ScoreHand(eHandStrength.FourOfAKind, 
 					CardsInHand.get(eCardNo.SecondCard.getCardNo()).getRank().getRank(),
-					0, CardsInHand.get(eCardNo.FirstCard.getCardNo()).getRank().getRank());
+					0, myKicker);
 		}
 
 		//EVALUATE FULL HOUSE
@@ -257,7 +281,7 @@ public class Hand {
 				ScoreHand(eHandStrength.FullHouse,
 					CardsInHand.get(eCardNo.FirstCard.getCardNo()).getRank().getRank(),
 					CardsInHand.get(eCardNo.FourthCard.getCardNo()).getRank().getRank(),
-					0);
+					myKicker);
 		}
 		
 		//Second Case
@@ -273,7 +297,7 @@ public class Hand {
 				ScoreHand(eHandStrength.FullHouse,
 					CardsInHand.get(eCardNo.ThirdCard.getCardNo()).getRank().getRank(),
 					CardsInHand.get(eCardNo.FirstCard.getCardNo()).getRank().getRank(),
-					0);
+					myKicker);
 		}
 		
 		//EVALUATE THREE OF A KIND
@@ -282,35 +306,41 @@ public class Hand {
 		else if(CardsInHand.get(eCardNo.FirstCard.getCardNo()).getRank()
 					.getRank() == CardsInHand
 					.get(eCardNo.ThirdCard.getCardNo()).getRank().getRank()){
-		
+			//make myKicker
+			myKicker.add(CardsInHand.get(eCardNo.FourthCard.getCardNo()).getRank().getRank());
+			myKicker.add(CardsInHand.get(eCardNo.FifthCard.getCardNo()).getRank().getRank());
 			//Score Hand
 			ScoreHand(eHandStrength.ThreeOfAKind,
 				CardsInHand.get(eCardNo.FirstCard.getCardNo()).getRank().getRank(),
 				0,
-				CardsInHand.get(eCardNo.FourthCard.getCardNo()).getRank().getRank());
+				myKicker);
 		}
 		//Second Case
 		else if(CardsInHand.get(eCardNo.SecondCard.getCardNo()).getRank()
 						.getRank() == CardsInHand
 						.get(eCardNo.FourthCard.getCardNo()).getRank().getRank()){
-			
+				//make myKicker
+				myKicker.add(CardsInHand.get(eCardNo.FirstCard.getCardNo()).getRank().getRank());
+				myKicker.add(CardsInHand.get(eCardNo.FifthCard.getCardNo()).getRank().getRank());
+				
 				//Score Hand
 				ScoreHand(eHandStrength.ThreeOfAKind,
 					CardsInHand.get(eCardNo.SecondCard.getCardNo()).getRank().getRank(),
-					0,
-					CardsInHand.get(eCardNo.FirstCard.getCardNo()).getRank().getRank());
+					0,myKicker);
 		}
 		
 		//Third Case
 		else if(CardsInHand.get(eCardNo.ThirdCard.getCardNo()).getRank()
 					.getRank() == CardsInHand
 					.get(eCardNo.FifthCard.getCardNo()).getRank().getRank()){
+			//set myKicker
+			myKicker.add(CardsInHand.get(eCardNo.FirstCard.getCardNo()).getRank().getRank());
+			myKicker.add(CardsInHand.get(eCardNo.SecondCard.getCardNo()).getRank().getRank());
 			
 			//Score hand
 			ScoreHand(eHandStrength.ThreeOfAKind,
 				CardsInHand.get(eCardNo.ThirdCard.getCardNo()).getRank().getRank(),
-				0,
-				CardsInHand.get(eCardNo.FirstCard.getCardNo()).getRank().getRank());
+				0,myKicker);
 		}
 		
 		//EVALUATE TWO PAIR
@@ -322,12 +352,13 @@ public class Hand {
 				&& CardsInHand.get(eCardNo.ThirdCard.getCardNo()).getRank()
 						.getRank() == CardsInHand
 						.get(eCardNo.FourthCard.getCardNo()).getRank().getRank()){
-			
+			//make myKicker
+			myKicker.add(CardsInHand.get(eCardNo.FifthCard.getCardNo()).getRank().getRank());
 			//Score Hand
 			ScoreHand(eHandStrength.TwoPair,
 					CardsInHand.get(eCardNo.FirstCard.getCardNo()).getRank().getRank(),
-					CardsInHand.get(eCardNo.ThirdCard.getCardNo()).getRank().getRank(),
-					CardsInHand.get(eCardNo.FifthCard.getCardNo()).getRank().getRank());
+					CardsInHand.get(eCardNo.ThirdCard.getCardNo()).getRank().getRank(),myKicker
+					);
 		}
 		
 		//Second Case
@@ -337,12 +368,13 @@ public class Hand {
 		&& CardsInHand.get(eCardNo.FourthCard.getCardNo()).getRank()
 				.getRank() == CardsInHand
 				.get(eCardNo.FifthCard.getCardNo()).getRank().getRank()){
-			
+			//make myKicker
+			myKicker.add(CardsInHand.get(eCardNo.ThirdCard.getCardNo()).getRank().getRank());
 			//Score Hand
 			ScoreHand(eHandStrength.TwoPair,
 					CardsInHand.get(eCardNo.FirstCard.getCardNo()).getRank().getRank(),
-					CardsInHand.get(eCardNo.FourthCard.getCardNo()).getRank().getRank(),
-					CardsInHand.get(eCardNo.ThirdCard.getCardNo()).getRank().getRank());
+					CardsInHand.get(eCardNo.FourthCard.getCardNo()).getRank().getRank(),myKicker
+					);
 		}
 		
 		//Third Case
@@ -352,12 +384,13 @@ public class Hand {
 		&& CardsInHand.get(eCardNo.FourthCard.getCardNo()).getRank()
 				.getRank() == CardsInHand
 				.get(eCardNo.FifthCard.getCardNo()).getRank().getRank()){
-			
+			//make myKicker
+			myKicker.add(CardsInHand.get(eCardNo.FirstCard.getCardNo()).getRank().getRank());
 			//Score Hand
 			ScoreHand(eHandStrength.TwoPair,
 					CardsInHand.get(eCardNo.SecondCard.getCardNo()).getRank().getRank(),
 					CardsInHand.get(eCardNo.FourthCard.getCardNo()).getRank().getRank(),
-					CardsInHand.get(eCardNo.FirstCard.getCardNo()).getRank().getRank());
+					myKicker);
 		}	
 		
 		// EVALUATE PAIR
@@ -366,64 +399,82 @@ public class Hand {
 		else if(CardsInHand.get(eCardNo.FirstCard.getCardNo()).getRank()
 			.getRank() == CardsInHand.get(eCardNo.SecondCard.getCardNo())
 			.getRank().getRank()){
+			//make myKicker
+			myKicker.add(CardsInHand.get(eCardNo.ThirdCard.getCardNo()).getRank().getRank());
+			myKicker.add(CardsInHand.get(eCardNo.FourthCard.getCardNo()).getRank().getRank());
+			myKicker.add(CardsInHand.get(eCardNo.FifthCard.getCardNo()).getRank().getRank());
 			
 			//Score Hand
 			ScoreHand(eHandStrength.Pair,
 					CardsInHand.get(eCardNo.FirstCard.getCardNo()).getRank().getRank(),
 					0,
-					CardsInHand.get(eCardNo.ThirdCard.getCardNo()).getRank().getRank());
+					myKicker);
 		}
 		
 		//Second Case
 		else if(CardsInHand.get(eCardNo.SecondCard.getCardNo()).getRank()
 				.getRank() == CardsInHand.get(eCardNo.ThirdCard.getCardNo())
 				.getRank().getRank()){
-			
+				//make myKicker
+				myKicker.add(CardsInHand.get(eCardNo.FirstCard.getCardNo()).getRank().getRank());
+				myKicker.add(CardsInHand.get(eCardNo.FourthCard.getCardNo()).getRank().getRank());
+				myKicker.add(CardsInHand.get(eCardNo.FifthCard.getCardNo()).getRank().getRank());
+				
 				//Score Hand 
 				ScoreHand(eHandStrength.Pair,
 						CardsInHand.get(eCardNo.SecondCard.getCardNo()).getRank().getRank(),
 						0,
-						CardsInHand.get(eCardNo.FirstCard.getCardNo()).getRank().getRank());
+						myKicker);
 			}
 		
 		//Third Case
 		else if(CardsInHand.get(eCardNo.ThirdCard.getCardNo()).getRank()
 				.getRank() == CardsInHand.get(eCardNo.FourthCard.getCardNo())
 				.getRank().getRank()){
-			
+				myKicker.add(CardsInHand.get(eCardNo.FirstCard.getCardNo()).getRank().getRank());
+				myKicker.add(CardsInHand.get(eCardNo.SecondCard.getCardNo()).getRank().getRank());
+				myKicker.add(CardsInHand.get(eCardNo.FifthCard.getCardNo()).getRank().getRank());
+				
 				//Score Hand
 				ScoreHand(eHandStrength.Pair,
 						CardsInHand.get(eCardNo.ThirdCard.getCardNo()).getRank().getRank(),
 						0,
-						CardsInHand.get(eCardNo.FirstCard.getCardNo()).getRank().getRank());
+						myKicker);
 			}
 		
 		//Fourth Case
 		else if(CardsInHand.get(eCardNo.FourthCard.getCardNo()).getRank()
 				.getRank() == CardsInHand.get(eCardNo.FifthCard.getCardNo())
 				.getRank().getRank()){
-			
+				myKicker.add(CardsInHand.get(eCardNo.FirstCard.getCardNo()).getRank().getRank());
+				myKicker.add(CardsInHand.get(eCardNo.SecondCard.getCardNo()).getRank().getRank());
+				myKicker.add(CardsInHand.get(eCardNo.ThirdCard.getCardNo()).getRank().getRank());
+				
 				//Score hand
 				ScoreHand(eHandStrength.Pair,
 						CardsInHand.get(eCardNo.FourthCard.getCardNo()).getRank().getRank(),
 						0,
-						CardsInHand.get(eCardNo.FirstCard.getCardNo()).getRank().getRank());
+						myKicker);
 			}
 	
 		// High Card
 		//	(Given in Spring Borgata)
 		else {
+			myKicker.add(CardsInHand.get(eCardNo.SecondCard.getCardNo()).getRank().getRank());
+			myKicker.add(CardsInHand.get(eCardNo.ThirdCard.getCardNo()).getRank().getRank());
+			myKicker.add(CardsInHand.get(eCardNo.FourthCard.getCardNo()).getRank().getRank());
+			myKicker.add(CardsInHand.get(eCardNo.FifthCard.getCardNo()).getRank().getRank());
+			
+			
 			ScoreHand(eHandStrength.HighCard,
 					CardsInHand.get(eCardNo.FirstCard.getCardNo()).getRank()
-							.getRank(), 0,
-					CardsInHand.get(eCardNo.SecondCard.getCardNo()).getRank()
-							.getRank());
+							.getRank(), 0,myKicker);
 		}
 	}
 
 
 
-	private void ScoreHand(eHandStrength hST, int HiHand, int LoHand, int Kicker) {
+	private void ScoreHand(eHandStrength hST, int HiHand, int LoHand, ArrayList<Integer> Kicker) {
 		this.HandStrength = hST.getHandStrength();
 		this.HiHand = HiHand;
 		this.LoHand = LoHand;
@@ -456,9 +507,23 @@ public class Hand {
 			if (result != 0) {
 				return result;
 			}
-
-			result = h2.getKicker() - h1.getKicker();
+			
+			
+			result = h2.getKicker().get(0) - h1.getKicker().get(0);
 			if (result != 0) {
+				return result;
+			}
+			result = h2.getKicker().get(1)-h1.getKicker().get(1);
+			if (result != 0){
+				return result;
+			}
+			result  = h2.getKicker().get(2)-h1.getKicker().get(2);
+			if (result != 0){
+				return result;
+				
+			}
+			result = h2.getKicker().get(3)-h1.getKicker().get(3);
+			if (result != 0 ){
 				return result;
 			}
 

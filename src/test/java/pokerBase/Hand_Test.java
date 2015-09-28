@@ -2,10 +2,10 @@ package pokerBase;
 
 import static org.junit.Assert.*;
 
+import java.util.ArrayList;
+
 import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 import pokerEnums.eHandStrength;
@@ -15,9 +15,11 @@ import pokerEnums.eSuit;
 public class Hand_Test {
 	Deck d = new Deck();
 	Hand h;
+	ArrayList<Integer> emptylist;
 	@Before
 	public void setUp() throws Exception {
 		h = new Hand(d);
+		emptylist = new ArrayList<Integer>();
 		
 	}
 
@@ -49,7 +51,7 @@ public class Hand_Test {
 		assertTrue(h1.getHandStrength()== eHandStrength.FourOfAKind.getHandStrength());
 		assertTrue(h1.getHighPairStrength() == eRank.KING.getRank());
 		assertTrue(h1.getLowPairStrength() == 0);
-		assertTrue(h1.getKicker()== eRank.FIVE.getRank());
+		assertTrue(h1.getKicker().get(0) == eRank.FIVE.getRank());
 	}
 	@Test
 	public void evalRoyalFlushTest(){
@@ -68,7 +70,7 @@ public class Hand_Test {
 		assertTrue(h1.getHandStrength()== eHandStrength.RoyalFlush.getHandStrength());
 		assertTrue(h1.getHighPairStrength() == 0);
 		assertTrue(h1.getLowPairStrength() == 0);
-		assertTrue(h1.getKicker()== 0);
+		assertTrue(h1.getKicker().isEmpty());
 	
 	}
 	@Test
@@ -88,7 +90,7 @@ public class Hand_Test {
 		assertTrue("1",h1.getHandStrength()== eHandStrength.StraightFlush.getHandStrength());
 		assertTrue("2",h1.getHighPairStrength() == eRank.FIVE.getRank());
 		assertTrue("3",h1.getLowPairStrength() == 0);
-		assertTrue("4",h1.getKicker()== 0);
+		assertTrue("4",h1.getKicker().isEmpty());
 	
 	}
 	@Test
@@ -108,7 +110,7 @@ public class Hand_Test {
 		assertTrue("1",h1.getHandStrength()== eHandStrength.StraightFlush.getHandStrength());
 		assertTrue("2",h1.getHighPairStrength() == eRank.SIX.getRank());
 		assertTrue("3",h1.getLowPairStrength() == 0);
-		assertTrue("4",h1.getKicker()== 0);
+		assertTrue("4",h1.getKicker().isEmpty());
 	
 	}	
 	@Test
@@ -129,7 +131,7 @@ public class Hand_Test {
 		assertTrue("5of a kind",h1.getHandStrength()== eHandStrength.FiveOfAKind.getHandStrength());
 		assertTrue("2",h1.getHighPairStrength() == eRank.ACE.getRank());
 		assertTrue("3",h1.getLowPairStrength() == 0);
-		assertTrue("4",h1.getKicker()== 0);
+		assertTrue("4",h1.getKicker().isEmpty());
 	
 	}
 	@Test
@@ -149,7 +151,7 @@ public class Hand_Test {
 		assertTrue("1",h1.getHandStrength()== eHandStrength.FullHouse.getHandStrength());
 		assertTrue("2",h1.getHighPairStrength() == eRank.QUEEN.getRank());
 		assertTrue("3",h1.getLowPairStrength() == eRank.KING.getRank());
-		assertTrue("4",h1.getKicker()== 0);
+		assertTrue("4",h1.getKicker().isEmpty());
 	
 	}
 	@Test
@@ -169,7 +171,7 @@ public class Hand_Test {
 		assertTrue("1",h1.getHandStrength()== eHandStrength.FullHouse.getHandStrength());
 		assertTrue("2",h1.getHighPairStrength() == eRank.KING.getRank());
 		assertTrue("3",h1.getLowPairStrength() == eRank.QUEEN.getRank());
-		assertTrue("4",h1.getKicker()== 0);
+		assertTrue("4",h1.getKicker().isEmpty());
 	
 	}
 	@Test
@@ -189,7 +191,8 @@ public class Hand_Test {
 		assertTrue("1",h1.getHandStrength()== eHandStrength.ThreeOfAKind.getHandStrength());
 		assertTrue("2",h1.getHighPairStrength() == eRank.KING.getRank());
 		assertTrue("3",h1.getLowPairStrength() == 0);
-		assertTrue("4",h1.getKicker()== eRank.TEN.getRank());
+		assertTrue("4",h1.getKicker().get(0)== eRank.TEN.getRank());
+		assertTrue("4",h1.getKicker().get(1)== eRank.FIVE.getRank());
 	
 	}
 	@Test
@@ -209,7 +212,8 @@ public class Hand_Test {
 		assertTrue("1",h1.getHandStrength()== eHandStrength.ThreeOfAKind.getHandStrength());
 		assertTrue("2",h1.getHighPairStrength() == eRank.KING.getRank());
 		assertTrue("3",h1.getLowPairStrength() == 0);
-		assertTrue("4",h1.getKicker()== eRank.ACE.getRank());
+		assertTrue("4",h1.getKicker().get(0)== eRank.ACE.getRank());
+		assertTrue("4",h1.getKicker().get(1)== eRank.TEN.getRank());
 	
 	}
 	@Test
@@ -229,7 +233,8 @@ public class Hand_Test {
 		assertTrue("1",h1.getHandStrength()== eHandStrength.ThreeOfAKind.getHandStrength());
 		assertTrue("2",h1.getHighPairStrength() == eRank.TEN.getRank());
 		assertTrue("3",h1.getLowPairStrength() == 0);
-		assertTrue("4",h1.getKicker()== eRank.ACE.getRank());
+		assertTrue("4",h1.getKicker().get(0)== eRank.ACE.getRank());
+		assertTrue("4",h1.getKicker().get(01)== eRank.KING.getRank());
 	
 	}
 	@Test
@@ -249,7 +254,7 @@ public class Hand_Test {
 		assertTrue("1",h1.getHandStrength()== eHandStrength.TwoPair.getHandStrength());
 		assertTrue("2",h1.getHighPairStrength() == eRank.ACE.getRank());
 		assertTrue("3",h1.getLowPairStrength() == eRank.KING.getRank());
-		assertTrue("4",h1.getKicker()== eRank.TEN.getRank());
+		assertTrue("4",h1.getKicker().get(0) == eRank.TEN.getRank());
 	
 	}
 	@Test
@@ -269,7 +274,7 @@ public class Hand_Test {
 		assertTrue("1",h1.getHandStrength()== eHandStrength.TwoPair.getHandStrength());
 		assertTrue("2",h1.getHighPairStrength() == eRank.KING.getRank());
 		assertTrue("3",h1.getLowPairStrength() == eRank.TEN.getRank());
-		assertTrue("4",h1.getKicker()== eRank.ACE.getRank());
+		assertTrue("4",h1.getKicker().get(0)== eRank.ACE.getRank());
 	
 	}
 	@Test
@@ -289,7 +294,7 @@ public class Hand_Test {
 		assertTrue("1",h1.getHandStrength()== eHandStrength.TwoPair.getHandStrength());
 		assertTrue("2",h1.getHighPairStrength() == eRank.KING.getRank());
 		assertTrue("3",h1.getLowPairStrength() == eRank.TEN.getRank());
-		assertTrue("4",h1.getKicker()== eRank.JACK.getRank());
+		assertTrue("4",h1.getKicker().get(0)== eRank.JACK.getRank());
 	
 	}
 	@Test
@@ -309,7 +314,9 @@ public class Hand_Test {
 		assertTrue("1",h1.getHandStrength()== eHandStrength.Pair.getHandStrength());
 		assertTrue("2",h1.getHighPairStrength() == eRank.KING.getRank());
 		assertTrue("3",h1.getLowPairStrength() == 0);
-		assertTrue("4",h1.getKicker()== eRank.QUEEN.getRank());
+		assertTrue("4",h1.getKicker().get(0)== eRank.QUEEN.getRank());
+		assertTrue("4",h1.getKicker().get(1)== eRank.JACK.getRank());
+		assertTrue("4",h1.getKicker().get(2)== eRank.TEN.getRank());
 	
 	}
 	@Test
@@ -329,7 +336,9 @@ public class Hand_Test {
 		assertTrue("1",h1.getHandStrength()== eHandStrength.Pair.getHandStrength());
 		assertTrue("2",h1.getHighPairStrength() == eRank.QUEEN.getRank());
 		assertTrue("3",h1.getLowPairStrength() == 0);
-		assertTrue("4",h1.getKicker()== eRank.KING.getRank());
+		assertTrue("4",h1.getKicker().get(0)== eRank.KING.getRank());
+		assertTrue("4",h1.getKicker().get(1)== eRank.JACK.getRank());
+		assertTrue("4",h1.getKicker().get(2)== eRank.TEN.getRank());
 	
 	}
 	@Test
@@ -349,7 +358,9 @@ public class Hand_Test {
 		assertTrue("1",h1.getHandStrength()== eHandStrength.Pair.getHandStrength());
 		assertTrue("2",h1.getHighPairStrength() == eRank.JACK.getRank());
 		assertTrue("3",h1.getLowPairStrength() == 0);
-		assertTrue("4",h1.getKicker()== eRank.KING.getRank());
+		assertTrue("4",h1.getKicker().get(0)== eRank.KING.getRank());
+		assertTrue("4",h1.getKicker().get(1)== eRank.QUEEN.getRank());
+		assertTrue("4",h1.getKicker().get(2)== eRank.TEN.getRank());
 	
 	}
 	@Test
@@ -369,7 +380,9 @@ public class Hand_Test {
 		assertTrue("1",h1.getHandStrength()== eHandStrength.Pair.getHandStrength());
 		assertTrue("2",h1.getHighPairStrength() == eRank.TEN.getRank());
 		assertTrue("3",h1.getLowPairStrength() == 0);
-		assertTrue("4",h1.getKicker()== eRank.KING.getRank());
+		assertTrue("4",h1.getKicker().get(0)== eRank.KING.getRank());
+		assertTrue("4",h1.getKicker().get(1)== eRank.QUEEN.getRank());
+		assertTrue("4",h1.getKicker().get(2)== eRank.JACK.getRank());
 	
 	}
 	@Test
@@ -389,7 +402,48 @@ public class Hand_Test {
 		assertTrue("1",h1.getHandStrength()== eHandStrength.HighCard.getHandStrength());
 		assertTrue("2",h1.getHighPairStrength() == eRank.KING.getRank());
 		assertTrue("3",h1.getLowPairStrength() == 0);
-		assertTrue("4",h1.getKicker()== eRank.QUEEN.getRank());
+		assertTrue("4",h1.getKicker().get(0)== eRank.QUEEN.getRank());
+		assertTrue("4",h1.getKicker().get(1)== eRank.JACK.getRank());
+		assertTrue("4",h1.getKicker().get(2)== eRank.TEN.getRank());
+		assertTrue("4",h1.getKicker().get(3)== eRank.TWO.getRank());
 	
+	}
+	@Test
+	public void ComparatorTest(){
+		Hand h1 = new Hand();
+		Hand h2 = new Hand();
+		
+		h1.setHandStrength(80);
+		h2.setHandStrength(40);
+		
+		assertEquals(Hand.HandRank.compare(h1,h2), -40);
+	}
+	@Test
+	public void ComparatorTest2(){
+		Hand h1 = new Hand();
+		Hand h2 = new Hand();
+		
+		h1.setHandStrength(80);
+		h2.setHandStrength(80);
+		h1.setHiHand(10);
+		h2.setHiHand(12);
+		assertEquals(Hand.HandRank.compare(h1,h2), 2);
+
+	}
+	@Test
+	public void ComparatorTest3(){
+		Hand h1 = new Hand();
+		Hand h2 = new Hand();
+		
+		h1.setHandStrength(70);
+		h2.setHandStrength(70);
+		h1.setHiHand(10);
+		h2.setHiHand(10);
+		h1.setLoHand(10);
+		h2.setLoHand(12);
+		
+		
+		assertEquals(Hand.HandRank.compare(h1,h2), 2);
+
 	}
 }
